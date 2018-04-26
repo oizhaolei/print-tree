@@ -11,6 +11,7 @@ function printTree<T>(
   getChildren: GetChildren<T>,
 ) {
   function printBranch(tree, branch) {
+    let treeText = '';
     const isGraphHead = branch.length === 0;
     const children = getChildren(tree) || [];
 
@@ -23,7 +24,8 @@ function printTree<T>(
     const toPrint = printNode(tree, `${branch}${branchHead}`);
 
     if (typeof toPrint === 'string') {
-      console.log(`${branch}${branchHead}${toPrint}`);
+      // console.log(`${branch}${branchHead}${toPrint}`);
+      treeText = `${treeText}\n${branch}${branchHead}${toPrint}`;
     }
 
     let baseBranch = branch;
@@ -37,11 +39,13 @@ function printTree<T>(
     const lastBranch = baseBranch + '└─';
 
     children.forEach((child, index) => {
-      printBranch(child, children.length - 1 === index ? lastBranch : nextBranch);
+      treeText = `${treeText}${printBranch(child, children.length - 1 === index ? lastBranch : nextBranch)}`;
     });
+
+    return treeText;
   }
 
-  printBranch(initialTree, '');
+  return printBranch(initialTree, '');
 }
 
 module.exports = printTree;
